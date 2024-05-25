@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BanG Dream! It's MyGO!!!!! (2023)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+<style>
+/* CSS styles for selected elements */
+.selectedd {
+    background-color: #ffcc00; /* Yellow */
+    color: #333; /* Dark grey */
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div id="dplayer"></div>
+<hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.8/hls.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.27.1/DPlayer.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+  const episodes = [
+    
+    {"name":"1","link":"https://raw.githack.com/Moleys/mygo/main/S01E01.m3u8"},
+    {"name":"2","link":"https://raw.githack.com/Moleys/mygo/main/S01E02.m3u8"},
+    {"name":"3","link":"https://raw.githack.com/Moleys/mygo/main/S01E03.m3u8"},
+    {"name":"4","link":"https://raw.githack.com/Moleys/mygo/main/S01E04.m3u8"},
+    {"name":"5","link":"https://raw.githack.com/Moleys/mygo/main/S01E05.m3u8"},
+    {"name":"6","link":"https://raw.githack.com/Moleys/mygo/main/S01E06.m3u8"},
+    {"name":"7","link":"https://raw.githack.com/Moleys/mygo/main/S01E07.m3u8"},
+    {"name":"8","link":"https://raw.githack.com/Moleys/mygo/main/S01E08.m3u8"},
+    {"name":"9","link":"https://raw.githack.com/Moleys/mygo/main/S01E09.m3u8"},
+    {"name":"10","link":"https://raw.githack.com/Moleys/mygo/main/S01E10.m3u8"},
+    {"name":"11","link":"https://raw.githack.com/Moleys/mygo/main/S01E11.m3u8"},
+    {"name":"12","link":"https://raw.githack.com/Moleys/mygo/main/S01E12.m3u8"},
+    {"name":"13","link":"https://raw.githack.com/Moleys/mygo/main/S01E13.m3u8"}
+
+  ];
+
+  const dp = new DPlayer({
+    container: document.getElementById('dplayer'),
+    screenshot: true,
+    video: {
+      url: getVideoUrl(), // Load the video based on the URL
+    },
+  });
+
+  function getVideoUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const episodeName = urlParams.get('ep');
+    const episode = episodes.find(ep => ep.name === episodeName);
+    return episode ? episode.link : episodes[0].link; // Return the link of the episode if found, otherwise, load the first episode
+  }
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('button-container');
+
+  episodes.forEach((episode) => {
+    const button = document.createElement('button');
+    button.textContent = episode.name;
+
+    button.addEventListener('click', () => {
+      // Remove 'selectedd' class from all buttons
+      document.querySelectorAll('.button-container button').forEach(btn => btn.classList.remove('selectedd'));
+      
+      // Add 'selectedd' class to the clicked button
+      button.classList.add('selectedd');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('ep', episode.name);
+      window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+
+      dp.switchVideo({
+        url: episode.link,
+      });
+    });
+
+    buttonContainer.appendChild(button);
+  });
+
+  document.body.appendChild(buttonContainer);
+</script>
+
+
+</body>
+</html>
